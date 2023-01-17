@@ -73,5 +73,6 @@ while running:
             board.on_click(event.pos)
         board.render(screen)
         pygame.display.flip()
-pygame.quit()
 
+
+pygame.quit()
