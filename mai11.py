@@ -10,6 +10,8 @@ class Board:
         self.top = 10
         self.cell_size = 30
         self.queue = 1
+        self.blue = []
+        self.red = []
 
     def set_view(self, left, top, cell_size):
         self.left = left
@@ -47,14 +49,18 @@ class Board:
         if (i >= 0 and j >= 0) and (i < self.width and j < self.height):
             i = cell_coords[0] // 30 - self.left // 30
             j = cell_coords[1] // 30 - self.top // 30
-            if self.queue:
-                pygame.draw.lines(screen, pygame.Color('red'), False, [[i * 30 + 5, j * 30 + 15],
+            if [i,j] not in self.blue and [i,j] not in self.red:
+                if self.queue:
+                    pygame.draw.lines(screen, pygame.Color('red'), False, [[i * 30 + 5, j * 30 + 15],
                                                                        [i * 30 + 25, j * 30 + 15]], 20)
-                self.queue = 0
-            else:
-                pygame.draw.lines(screen, pygame.Color('blue'), False, [[i * 30 + 5, j * 30 + 15],
+                    self.queue = 0
+                    self.red.append([i,j])
+                else:
+                    pygame.draw.lines(screen, pygame.Color('blue'), False, [[i * 30 + 5, j * 30 + 15],
                                                                        [i * 30 + 25, j * 30 + 15]], 20)
-                self.queue = 1
+                    self.queue = 1
+                    self.blue.append([i, j])
+
         else:
             print(None)
 
