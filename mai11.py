@@ -12,6 +12,8 @@ class Board:
         self.queue = 1
         self.blue = []
         self.red = []
+        self.bluefuturestep = []
+        self.redfuturestep = []
 
     def set_view(self, left, top, cell_size):
         self.left = left
@@ -51,15 +53,37 @@ class Board:
             j = cell_coords[1] // 30 - self.top // 30
             if [i, j] not in self.blue and [i, j] not in self.red:
                 if self.queue:
-                    pygame.draw.lines(screen, pygame.Color('red'), False, [[i * 30 + 5, j * 30 + 15],
-                                                                           [i * 30 + 25, j * 30 + 15]], 20)
-                    self.queue = 0
-                    self.red.append([i, j])
+                    if [i, j] in self.redfuturestep or not self.red:
+                        pygame.draw.lines(screen, pygame.Color('red'), False,
+                                          [[i * 30 + 5, j * 30 + 15], [i * 30 + 25, j * 30 + 15]], 20)
+                        self.queue = 0
+                        self.red.append([i, j])
+                        self.redfuturestep = []
+                        for i in self.blue:
+                            if [i[0] + 1, i[1]] not in self.blue and [i[0] + 1, i[1]] not in self.red:
+                                self.bluefuturestep.append([i[0] + 1, i[1]])
+                            if [i[0] - 1, i[1]] not in self.blue and [i[0] - 1, i[1]] not in self.red:
+                                self.bluefuturestep.append([i[0] - 1, i[1]])
+                            if [i[0], i[1] + 1] not in self.blue and [i[0], i[1] + 1] not in self.red:
+                                self.bluefuturestep.append([i[0], i[1] + 1])
+                            if [i[0], i[1] - 1] not in self.blue and [i[0], i[1] - 1] not in self.red:
+                                self.bluefuturestep.append([i[0], i[1] - 1])
                 else:
-                    pygame.draw.lines(screen, pygame.Color('blue'), False, [[i * 30 + 5, j * 30 + 15],
-                                                                            [i * 30 + 25, j * 30 + 15]], 20)
-                    self.queue = 1
-                    self.blue.append([i, j])
+                    if [i, j] in self.bluefuturestep or not self.blue:
+                        pygame.draw.lines(screen, pygame.Color('blue'), False,
+                                          [[i * 30 + 5, j * 30 + 15], [i * 30 + 25, j * 30 + 15]], 20)
+                        self.queue = 1
+                        self.blue.append([i, j])
+                        self.bluefuturestep = []
+                        for i in self.red:
+                            if [i[0] + 1, i[1]] not in self.blue and [i[0] + 1, i[1]] not in self.red:
+                                self.redfuturestep.append([i[0] + 1, i[1]])
+                            if [i[0] - 1, i[1]] not in self.blue and [i[0] - 1, i[1]] not in self.red:
+                                self.redfuturestep.append([i[0] - 1, i[1]])
+                            if [i[0], i[1] + 1] not in self.blue and [i[0], i[1] + 1] not in self.red:
+                                self.redfuturestep.append([i[0], i[1] + 1])
+                            if [i[0], i[1] - 1] not in self.blue and [i[0], i[1] - 1] not in self.red:
+                                self.redfuturestep.append([i[0], i[1] - 1])
 
         else:
             print(None)
